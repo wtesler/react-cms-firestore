@@ -1,6 +1,6 @@
 {
   "name": "react-cms-firestore",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Dependency-inject CMS data into any react component from the Firestore",
   "dependencies": {
     "firebase": "^9.0.0-beta.6",
