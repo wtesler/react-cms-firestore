@@ -16,7 +16,7 @@ const COLL_ID = 'cms';
 const COLL_EDITOR_ID = 'cms-editor';
 const  SECTIONS_DOC_ID = 'sections';
 
-export class CmsClient {
+export default class CmsClient {
   static async readCms(keys) {
     if (!Array.isArray(keys)) {
       keys = [keys];

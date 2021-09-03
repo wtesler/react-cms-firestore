@@ -9,7 +9,7 @@ the second argument to `withCms` defines the CMS entries injected into the compo
 
 Import looks like:
 
-`import withCms from "react-cms-firestore/withCms";`
+`import {withCms} from "react-cms-firestore";`
 
 Usage often looks like this:
 
@@ -64,3 +64,7 @@ match /cms-editor/{id} {
 
 
 The Firestore needs to be initialized in the code before `withCms` is used.
+
+### For Developer
+
+Remember to npm run build before deploying.

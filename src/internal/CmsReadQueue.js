@@ -1,5 +1,5 @@
 import rootCms from "./RootCms";
-import {CmsClient} from "../CmsClient";
+import CmsClient from "../CmsClient";
 
 class CmsReadQueue {
   constructor() {
