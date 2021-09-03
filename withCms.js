@@ -2,6 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import rootCms from "./internal/RootCms";
 import cmsReadQueue from "./internal/CmsReadQueue";
 import {CmsHelper} from "./internal/CmsHelper";
+import React from 'react';
 
 /**
  * Injects CMS data into the component.
@@ -52,7 +53,7 @@ export default function withCms(WrappedComponent, keys = []) {
       if (!isCmsReady) {
         return null;
       }
-      return <WrappedComponent {...props} cms={rootCms}/>;
+      return React.createElement(WrappedComponent, Object.assign({}, props, {cms: rootCms}));
     }, [props, isCmsReady]);
 
     return content;

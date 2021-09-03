@@ -12,18 +12,18 @@ import {
   writeBatch
 } from 'firebase/firestore';
 
-export class CmsClient {
-  static COLL_ID = 'cms';
-  static COLL_EDITOR_ID = 'cms-editor';
-  static SECTIONS_DOC_ID = 'sections';
+const COLL_ID = 'cms';
+const COLL_EDITOR_ID = 'cms-editor';
+const  SECTIONS_DOC_ID = 'sections';
 
+export class CmsClient {
   static async readCms(keys) {
     if (!Array.isArray(keys)) {
       keys = [keys];
     }
 
     const db = getFirestore();
-    const coll = collection(db, CmsClient.COLL_ID);
+    const coll = collection(db, COLL_ID);
     const q = await query(coll, where(documentId(), 'in', keys));
     const querySnapshot = await getDocs(q);
     const responseMap = {}
@@ -52,7 +52,7 @@ export class CmsClient {
    */
   static async readCmsSections() {
     const db = getFirestore();
-    const docRef = doc(db, CmsClient.COLL_EDITOR_ID, CmsClient.SECTIONS_DOC_ID);
+    const docRef = doc(db, COLL_EDITOR_ID, SECTIONS_DOC_ID);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -77,10 +77,10 @@ export class CmsClient {
 
     const batch = writeBatch(db);
 
-    const docRef = doc(db, CmsClient.COLL_ID, key);
+    const docRef = doc(db, COLL_ID, key);
     batch.set(docRef, data, {merge: true});
 
-    const sectionRef = doc(db, CmsClient.COLL_EDITOR_ID, CmsClient.SECTIONS_DOC_ID);
+    const sectionRef = doc(db, COLL_EDITOR_ID, SECTIONS_DOC_ID);
     batch.set(sectionRef, {[key]: true}, {merge: true}); // Keep a reference to the document id for the section.
 
     await batch.commit();
@@ -92,10 +92,10 @@ export class CmsClient {
     const db = getFirestore();
     const batch = writeBatch(db);
 
-    const docRef = doc(db, CmsClient.COLL_ID, key);
+    const docRef = doc(db, COLL_ID, key);
     batch.delete(docRef);
 
-    const sectionRef = doc(db, CmsClient.COLL_EDITOR_ID, CmsClient.SECTIONS_DOC_ID);
+    const sectionRef = doc(db, COLL_EDITOR_ID, SECTIONS_DOC_ID);
     batch.set(sectionRef, {[key]: deleteField()}, {merge: true}); // Remove reference to the document id for the section.
 
     await batch.commit();
