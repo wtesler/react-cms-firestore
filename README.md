@@ -1,55 +1,66 @@
-## react-hoc-di
+## react-cms-firestore
 
 
-Wrap your component in `withModule` to have `props.module` injected into your components.
+Wrap your component in `withCms` to have `props.cms` injected into your components.
 
-Objects in the module may persist outside the component scope.
+CMS data is downloaded from the Firestore.
 
-Avoids needless piping of objects through the props of components.
-
-You may pass in additional modules into `withModule` to have the lifecycle
-of the given modules bound to the component.
-
-`props.module` is a composite of all added modules.
+the second argument to `withCms` defines the CMS entries injected into the component.
 
 Import looks like:
 
-`import withModule from "react-hoc-di/withModule";`
+`import withCms from "react-cms-firestore/withCms";`
 
 Usage often looks like this:
 
-`export default withModule(MyScreen, MyModule);`
+`export default withCms(MyScreen, 'MyScreenData');`
 
 or 
 
-`export default withModule(MyComponent);`
+`export default withCms(MyComponent, ['entry1', 'entry2']);`
 
-or
 
-`export default withModule(MyComponent, [MyModule1, MyModule2]);`
-
-### Modules
-
-Modules always define a `construct` and `destruct` function.
-
-Note `construct` is not the same as `constructor`.
-
-The shell of a module looks like this:
+Then the data can be accessed like:
 
 ```
-class MyModule {
-  constructor(rootModule) {
-    this.rootModule = rootModule;
-  }
+const {cms} = props;
+const {footerCms, headerCms} = cms;
+const {footerTitle} = footerCms;
+const {headerLogoUrl} = headerCms;
+...
+```
 
-  construct() {
-  // Set objects onto root module.
-  }
 
-  destruct() {
-    // Remove those objects from root module.
-  }
+### Initialization
+
+Add a collection called `cms` to your Firestore.
+Add a collection called `cms-editor` to your Firestore.
+Add a collection called `roles` to your Firestore.
+
+`roles` contains documents where each document id is a uid and
+the document data looks like:
+```
+{
+    editor: true
+}
+```
+
+####Security Rules
+```
+function isEditor() {
+  return request.auth != null && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.editor == true;
 }
 
-export default MyModule;
+match /cms/{id} {
+  allow read: if true;
+  allow write: if isEditor();
+}
+
+match /cms-editor/{id} {
+  allow read: if isEditor();
+  allow write: if isEditor();
+}
 ```
+
+
+The Firestore needs to be initialized in the code before `withCms` is used.
