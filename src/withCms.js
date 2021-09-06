@@ -32,14 +32,14 @@ export default function withCms(WrappedComponent, keys = []) {
       return () => {
         mountedRef.current = false
       }
-    }, [])
+    }, []);
 
     const readCms = useCallback(async (keys) => {
-      cmsReadQueue.add(keys);
+      cmsReadQueue.add(keys, rootCms);
 
       const waitPromises = [];
       for (const key of keys) {
-        waitPromises.push(cmsReadQueue.waitForData(key));
+        waitPromises.push(cmsReadQueue.waitForData(key, rootCms));
       }
 
       const dataPerKey = await Promise.all(waitPromises);

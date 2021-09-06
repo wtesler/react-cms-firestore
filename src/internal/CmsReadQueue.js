@@ -1,4 +1,3 @@
-import rootCms from "./RootCms";
 import CmsClient from "../CmsClient";
 
 class CmsReadQueue {
@@ -9,7 +8,7 @@ class CmsReadQueue {
     this._coalesceTimeout = null;
   }
 
-  add(keys) {
+  add(keys, rootCms) {
     for (const key of keys) {
       if (!(key in rootCms) && !(key in this._keys) && !(key in this._resolutions)) {
         this._keys.push(key);
@@ -28,7 +27,7 @@ class CmsReadQueue {
     }
   }
 
-  async waitForData(key) {
+  async waitForData(key, rootCms) {
     if (key in rootCms) {
       return rootCms[key];
     }
