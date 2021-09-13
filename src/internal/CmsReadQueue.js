@@ -51,7 +51,7 @@ class CmsReadQueue {
         return;
       }
 
-      console.log(`fetching cms keys: [${keysCopy}]`);
+      // console.log(`fetching cms keys: [${keysCopy}]`);
       const startTime = Date.now();
       dataPerKey = await CmsClient.readCms(keysCopy);
       const endTime = Date.now();
