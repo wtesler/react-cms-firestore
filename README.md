@@ -35,30 +35,31 @@ const {headerLogoUrl} = headerCms;
 
 Add a collection called `cms` to your Firestore.
 Add a collection called `cms-editor` to your Firestore.
-Add a collection called `roles` to your Firestore.
-
-`roles` contains documents where each document id is a uid and
-the document data looks like:
-```
-{
-    editor: true
-}
-```
 
 ####Security Rules
+Users with the role of admin or cmsEditor can update cms.
+Everyone can read cms.
+
+Use firebase-roles package to set up initial roles.
+
 ```
-function isEditor() {
-  return request.auth != null && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.editor == true;
+function isCmsEditor() {
+  return request.auth != null 
+    && request.auth.token != null 
+    && (
+    request.auth.token.admin == true || 
+    request.auth.token.cmsEditor == true
+    );
 }
 
 match /cms/{id} {
   allow read: if true;
-  allow write: if isEditor();
+  allow write: if isCmsEditor();
 }
 
 match /cms-editor/{id} {
-  allow read: if isEditor();
-  allow write: if isEditor();
+  allow read: if isCmsEditor();
+  allow write: if isCmsEditor();
 }
 ```
 
