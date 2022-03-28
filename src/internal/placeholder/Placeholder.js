@@ -20,7 +20,7 @@ const Placeholder = props => {
       let parentWidth = outerRef.current.parentNode.offsetWidth;
       let parentHeight = outerRef.current.parentNode.offsetHeight;
 
-      if (width) {
+      if (width && width < parentWidth) {
         setOurWidth(width);
       } else {
         setOurWidth(parentWidth);
@@ -72,29 +72,48 @@ const Placeholder = props => {
     return s;
   }, [ourWidth, ourHeight]);
 
-  let contentWidth = ourWidth;
-  let contentHeight = ourHeight;
+  const contentWidth = useMemo(() => {
+    if (!ourWidth) {
+      return null;
+    }
+    let w = ourWidth;
+    if (padding) {
+      w -= (2 * padding);
+    } else {
+      if (paddingRight) {
+        w -= paddingRight;
+      }
+      if (paddingLeft) {
+        w -= paddingLeft;
+      }
+    }
+    return w;
+  }, [ourWidth]);
 
-  if (padding) {
-    contentWidth -= (2 * padding);
-    contentHeight -= (2 * padding);
-  } else {
-    if (paddingTop) {
-      contentHeight -= paddingTop;
+  const contentHeight = useMemo(() => {
+    if (!ourHeight) {
+      return null;
     }
-    if (paddingRight) {
-      contentWidth -= paddingRight;
+    let h = ourHeight;
+    if (padding) {
+      h -= (2 * padding);
+    } else {
+      if (paddingTop) {
+        h -= paddingRight;
+      }
+      if (paddingBottom) {
+        h -= paddingLeft;
+      }
     }
-    if (paddingBottom) {
-      contentHeight -= paddingBottom;
-    }
-    if (paddingLeft) {
-      contentWidth -= paddingLeft;
-    }
-  }
+    return h;
+  }, [ourHeight]);
 
-  return (
-    <div style={overrideStyle} ref={outerRef}>
+  const loaderElement = useMemo(() => {
+    if (!contentWidth || !contentHeight) {
+      return null;
+    }
+
+    return (
       <ContentLoader
         width={contentWidth}
         height={contentHeight}
@@ -109,6 +128,12 @@ const Placeholder = props => {
       >
         <rect x={0} y={0} rx={3} ry={3} width={contentWidth} height={contentHeight}/>
       </ContentLoader>
+    )
+  }, [contentWidth, contentHeight]);
+
+  return (
+    <div style={overrideStyle} ref={outerRef}>
+      {loaderElement}
     </div>
   );
 }
