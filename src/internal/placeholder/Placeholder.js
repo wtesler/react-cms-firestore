@@ -4,11 +4,13 @@ import {useEffect, useCallback, useRef, useMemo, useState} from "react";
 
 const Placeholder = props => {
   const {style} = props;
-  let {width, height, padding, paddingTop, paddingRight, paddingBottom, paddingLeft} = style;
+  let {width, height, padding, paddingTop, paddingRight, paddingBottom, paddingLeft, radius} = style;
 
   if (!width && !height) {
     return null;
   }
+
+  radius = (radius === null || radius === undefined) ? 3 : radius;
 
   const [ourWidth, setOurWidth] = useState(null);
   const [ourHeight, setOurHeight] = useState(null);
@@ -20,7 +22,7 @@ const Placeholder = props => {
       let parentWidth = outerRef.current.parentNode.offsetWidth;
       let parentHeight = outerRef.current.parentNode.offsetHeight;
 
-      if (width && width < parentWidth) {
+      if (width) {
         setOurWidth(width);
       } else {
         setOurWidth(parentWidth);
@@ -99,10 +101,10 @@ const Placeholder = props => {
       h -= (2 * padding);
     } else {
       if (paddingTop) {
-        h -= paddingRight;
+        h -= paddingTop;
       }
       if (paddingBottom) {
-        h -= paddingLeft;
+        h -= paddingBottom;
       }
     }
     return h;
@@ -126,7 +128,7 @@ const Placeholder = props => {
         gradientRatio={2}
         interval={.1}
       >
-        <rect x={0} y={0} rx={3} ry={3} width={contentWidth} height={contentHeight}/>
+        <rect x={0} y={0} rx={radius} ry={radius} width={contentWidth} height={contentHeight}/>
       </ContentLoader>
     )
   }, [contentWidth, contentHeight]);

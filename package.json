@@ -1,6 +1,6 @@
 {
   "name": "react-cms-firestore",
-  "version": "1.6.7",
+  "version": "1.7.0",
   "description": "Dependency-inject CMS data into any react component from the Firestore",
   "scripts": {
     "build": "npm run clean && babel src --out-dir dist --copy-files",
