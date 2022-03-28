@@ -16,6 +16,9 @@ const COLL_ID = 'cms';
 const COLL_EDITOR_ID = 'cms-editor';
 const  SECTIONS_DOC_ID = 'sections';
 
+/**
+ * Used by the CMS Editor library.
+ */
 export default class CmsClient {
   static async readCms(keys) {
     if (!Array.isArray(keys)) {

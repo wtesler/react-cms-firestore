@@ -2,6 +2,7 @@ import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import cmsReadQueue from "./internal/CmsReadQueue";
 import {CmsHelper} from "./internal/CmsHelper";
 import React from 'react';
+import Placeholder from "./internal/placeholder/Placeholder";
 
 // Global singleton which acts as the cms which gets injected into components.
 if (!globalThis.cms_firestore) {
@@ -15,7 +16,7 @@ if (!globalThis.cms_firestore) {
  *
  * Access data with props.cms from inside component.
  */
-export default function withCms(WrappedComponent, keys = []) {
+export default function withCms(WrappedComponent, keys = [], placeHolderStyle) {
   return props => {
     if (!Array.isArray(keys)) {
       keys = [keys];
@@ -65,8 +66,12 @@ export default function withCms(WrappedComponent, keys = []) {
     }, [isCmsReady, readCms]);
 
     const content = useMemo(() => {
-      if (!isCmsReady) {
-        return null;
+      if (!isCmsReady || (placeHolderStyle && placeHolderStyle.test)) {
+        if (placeHolderStyle) {
+          return React.createElement(Placeholder, {style: placeHolderStyle});
+        } else {
+          return null;
+        }
       }
       return React.createElement(WrappedComponent, Object.assign({}, props, {cms: rootCms}));
     }, [props, isCmsReady]);

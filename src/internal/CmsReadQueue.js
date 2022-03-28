@@ -51,11 +51,10 @@ class CmsReadQueue {
         return;
       }
 
-      // console.log(`fetching cms keys: [${keysCopy}]`);
-      const startTime = Date.now();
+      // const startTime = Date.now();
       dataPerKey = await CmsClient.readCms(keysCopy);
-      const endTime = Date.now();
-      console.log(`fetched cms keys [${keysCopy}] in ${endTime - startTime}ms`);
+      // const endTime = Date.now();
+      // console.log(`fetched cms keys [${keysCopy}] in ${endTime - startTime}ms`);
     } catch (e) {
       console.error(e);
     } finally {

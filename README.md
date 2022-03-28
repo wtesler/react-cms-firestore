@@ -1,6 +1,5 @@
 ## react-cms-firestore
 
-
 Wrap your component in `withCms` to have `props.cms` injected into your components.
 
 CMS data is downloaded from the Firestore.
@@ -19,7 +18,6 @@ or
 
 `export default withCms(MyComponent, ['entry1', 'entry2']);`
 
-
 Then the data can be accessed like:
 
 ```
@@ -30,6 +28,16 @@ const {headerLogoUrl} = headerCms;
 ...
 ```
 
+### Placeholder Component
+
+There is a optional third parameter which styles a
+default placeholder while the data is loading. It may look like
+this:
+
+`export default withCms(MyComponent, 'myCmsData', {width: 200, height:100});`
+
+The possible style values are:
+`width`, `height`, `padding`, `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`
 
 ### Initialization
 
