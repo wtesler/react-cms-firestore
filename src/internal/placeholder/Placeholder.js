@@ -53,7 +53,8 @@ const Placeholder = props => {
   const overrideStyle = useMemo(() => {
     const s = {
       width: ourWidth,
-      height: ourHeight
+      height: ourHeight,
+      maxWidth: '100%'
     }
     if (padding) {
       s.padding = `${padding}px`;

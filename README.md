@@ -37,7 +37,9 @@ this:
 `export default withCms(MyComponent, 'myCmsData', {width: 200, height:100});`
 
 The possible style values are:
-`width`, `height`, `padding`, `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`,
+`width`, `height`, 
+`padding`, `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`,
+`radius`,
 and `test`.
 
 `test` forces the placeholder state for easy testing.
