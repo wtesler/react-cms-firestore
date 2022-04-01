@@ -30,8 +30,10 @@ export default function withCms(WrappedComponent, keys = [], placeHolderStyle) {
 
     const mountedRef = useRef(true);
     useEffect(() => {
+      mountedRef.current = true;
+
       return () => {
-        mountedRef.current = false
+        mountedRef.current = false;
       }
     }, []);
 
