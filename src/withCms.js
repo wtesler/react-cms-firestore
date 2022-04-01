@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import cmsReadQueue from "./internal/CmsReadQueue";
 import {CmsHelper} from "./internal/CmsHelper";
 import React from 'react';
@@ -28,6 +28,13 @@ export default function withCms(WrappedComponent, keys = [], placeHolderStyle) {
 
     const [isCmsReady, setIsCmsReady] = useState(initialReadyState);
 
+    const mountedRef = useRef(true);
+    useEffect(() => {
+      return () => {
+        mountedRef.current = false
+      }
+    }, []);
+
     const readCms = useCallback(async (keys) => {
       cmsReadQueue.add(keys, rootCms);
 
@@ -45,8 +52,9 @@ export default function withCms(WrappedComponent, keys = [], placeHolderStyle) {
         rootCms[key] = data;
       }
 
-      setIsCmsReady(true);
-
+      if (mountedRef.current) {
+        setIsCmsReady(true);
+      }
     }, []);
 
     useEffect(() => {
